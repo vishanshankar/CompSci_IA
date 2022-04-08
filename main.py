@@ -59,7 +59,8 @@ def app():
             signup_success = signup_page()
             login_button = st.button("Already have an account? Login.")
         if signup_success:
-            placeholder.empty() login_button = True
+            placeholder.empty()
+            login_button = True
         placeholder2 = st.empty()
         with placeholder2.container():
             if login_button or st.session_state['login']:
@@ -84,6 +85,10 @@ def app():
                 with placeholder3.container():
                     welcome_success = welcome_app()
                     st.session_state['welcome_success'] =  welcome_success
+            else:
+                    welcome_success = True
+                    st.session_state['welcome_success'] =  True
+
             if welcome_success:
                 placeholder3.empty()
                 conn = sqlite3.connect('data.db')
