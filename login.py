@@ -1,6 +1,7 @@
 import webbrowser
 import streamlit as st
 import sqlite3
+from welcome import app
 
 def login():
     st.session_state.login = True
@@ -17,12 +18,14 @@ def login():
         user = c.fetchall()
         if user:
             st.session_state['name'] =user[0][1]
-            print("WOOO SUCCESS")
+            st.session_state['email'] = email
             authenticated = True
             st.success("Login Successful")
-            st.write(st.session_state['name'])
+            print("returning true.....")
+            return True
         else:
             st.error("Login Failed")
+            return False
 
 if __name__ == "__main__":
     login()
