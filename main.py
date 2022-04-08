@@ -43,13 +43,14 @@ def app():
     if 'email' not in st.session_state:
         st.session_state['email'] =  None
 
-    if 'welcome_app' not in st.session_state:
-        st.session_state['welcome_app'] =  False
+    if 'welcome_success' not in st.session_state:
+        st.session_state['welcome_success'] =  False
 
 
 
     login_success = st.session_state["login_success"]
     email = st.session_state["email"]
+    welcome_success = st.session_state["welcome_success"]
     placeholder = st.empty()
     placeholder2 = st.empty()
     placeholder3 = st.empty()
@@ -58,8 +59,7 @@ def app():
             signup_success = signup_page()
             login_button = st.button("Already have an account? Login.")
         if signup_success:
-            placeholder.empty()
-            login_button = True
+            placeholder.empty() login_button = True
         placeholder2 = st.empty()
         with placeholder2.container():
             if login_button or st.session_state['login']:
@@ -83,6 +83,7 @@ def app():
             if len(res) == 0:
                 with placeholder3.container():
                     welcome_success = welcome_app()
+                    st.session_state['welcome_success'] =  welcome_success
             if welcome_success:
                 placeholder3.empty()
                 conn = sqlite3.connect('data.db')
