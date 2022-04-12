@@ -93,19 +93,26 @@ def app():
                 placeholder3.empty()
                 conn = sqlite3.connect('data.db')
                 c = conn.cursor()
+
                 c.execute("SELECT * FROM USER_INFO WHERE email = ?", (email,))
                 res = c.fetchall()
-                data = res[0]
+                data = res[-1]
                 hl_subjects = data[1].split(",")
                 sl_subjects = data[2].split(",")
                 subject_conf = data[3]
                 job_fam = data[4]
                 job_conf = data[5]
+
                 st.write(f"Your HL Subjects are: {hl_subjects}")
                 st.write(f"Your SL Subjects are: {sl_subjects}")
                 st.write(f"Your SUBJECT_CONF is: {subject_conf}")
                 st.write(f"Your job_fam is : {job_fam}")
                 st.write(f"Your job_conf is: {job_conf}")
+                change_courses  = st.checkbox("Want to change your profile?")
+                if change_courses:
+                    welcome_app()
+                   
+
 
 
 

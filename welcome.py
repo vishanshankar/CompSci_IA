@@ -18,7 +18,14 @@ def app():
         st.write("Our System will give you suggestions as well as send your information to a counsellor to help you get a better idea about how to go about your IB journey")
         submit = st.form_submit_button("Submit")
         if submit:
-            conn.execute('INSERT INTO USER_INFO VALUES (?,?,?,?,?,?)', (email, ",".join(hl_options), ",".join(sl_options), subject_conf, career_path_options, career_conf))
+
+            res = conn.execute("SELECT * FROM USER_INFO WHERE email = ?", (email,)).fetchall()
+            st.write
+            if len(res) == 0:
+                conn.execute('INSERT INTO USER_INFO VALUES (?,?,?,?,?,?)', (email, ",".join(hl_options), ",".join(sl_options), subject_conf, career_path_options, career_conf))
+            else:
+                conn.execute('DELETE FROM USER_INFO WHERE email = ?', (email,))
+                conn.execute('INSERT INTO USER_INFO VALUES (?,?,?,?,?,?)', (email, ",".join(hl_options), ",".join(sl_options), subject_conf, career_path_options, career_conf))
             db.commit()
             db.close()
             st.session_state['welcome_app'] =  True
