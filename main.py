@@ -1,6 +1,5 @@
 import streamlit as st
 import sqlite3
-import webbrowser
 from login import login
 from welcome import app as welcome_app
 import pandas as pd
@@ -111,7 +110,31 @@ def app():
                 change_courses  = st.checkbox("Want to change your profile?")
                 if change_courses:
                     welcome_app()
-                   
+                job_confidence = False
+                subject_confidence = False
+                if subject_conf == 1:
+                    subject_confidence == True
+                if job_conf == 1:
+                    job_confidence == True
+                st.title("Home")
+                st.header("What is this?")
+                st.write("Welcome to your Future Planner, here you will find everything you need to succeed throughout your journey through the IB.")
+                st.write("This app is still under development, so please be patient with us.")
+                st.header("Where do I go from here?")
+                st.write("The information you have provided us with has been sent for review to a counselor. The counselor will choose the best course of action for your IB journey and report back to you as soon as possible. Please be patient!")
+                st.header("Your Responses")
+                st.write(f"Your HL Subjects are: {hl_subjects}")
+                st.write(f"Your SL Subjects are: {sl_subjects}")
+                st.write(f"You are confident that you will choose these subjects: {subject_confidence}")
+                st.write(f"Your Career Choice is : {job_fam}")
+                st.write(f"You are confident about your Career Choice: {job_confidence}")
+                st.header("Our Suggestions based on your Responses")
+                if "Physics" in hl_subjects and "Math" in hl_subjects:
+                    st.write("Your HL Subjects suggest that you would thrive in an Engineering career")
+                if "Business Management" in hl_subjects and "Economics" in hl_subjects:
+                    st.write("Your HL Subjects suggest that you would thrive in an Accounting or Business Related Career")
+
+
 
 
 
@@ -120,9 +143,29 @@ def admin():
     conn = sqlite3.connect('data.db')
     c = conn.cursor()
     c.execute("SELECT * FROM user_info")
-    st.markdown("# Admin Panel")
+    st.title("Admin Panel")
+    st.header("Student Choices")
     df = pd.DataFrame(c.fetchall(), columns=["email","hl_options", "sl_options", "subject_conf", "career_path", "career_conf"])
     st.write(df)
+    hl_subjects = df["hl_options"]
+    from collections import defaultdict
+    subject_counter = defaultdict(int)
+    for x in hl_subjects:
+        for y in x.split(","):
+            subject_counter[y] += 1
+    dframe = pd.DataFrame({'count': subject_counter})
+    st.header("HL Subject Counts")
+    st.bar_chart(data=dframe, width=0, height=0, use_container_width=True)
+
+    sl_subjects = df["sl_options"]
+    subject_counter1 = defaultdict(int)
+    for x in sl_subjects:
+        for y in x.split(","):
+            subject_counter1[y] += 1
+    dframe1 = pd.DataFrame({'count': subject_counter1})
+    st.header("SL Subject Count")
+    st.bar_chart(data=dframe1, width=0, height=0, use_container_width=True)
+
 
 
 
